@@ -1,5 +1,6 @@
 package com.thoughtworks.testdox.ant;
 
+import com.thoughtworks.testdox.ConsoleGenerator;
 import com.thoughtworks.testdox.HtmlDocumentGenerator;
 import com.thoughtworks.testdox.Main;
 import org.apache.tools.ant.BuildException;
@@ -19,6 +20,7 @@ public class TestDoxTask extends Task {
     private File dir;
     private File output;
     private String propertyName;
+    private String format;
 
     public void setProject(Project project) {
         this.project = project;
@@ -32,15 +34,30 @@ public class TestDoxTask extends Task {
         this.output = output;
     }
 
+    public void setFormat(String format) {
+        this.format = format;
+    }
+
     public void execute() {
         log("Processing files from " + dir);
         Main main = new Main();
         try {
             main.setInputFile(dir);
             PrintWriter out = new PrintWriter(new FileWriter(output));
-            main.addDocumentGenerator(new XDocGenerator(out));
+            if(format==null) {
+            	main.addDocumentGenerator(new XDocGenerator(out));
+            } else {
+            	if(format.indexOf("html")>-1) {
+                	main.addDocumentGenerator(new HtmlDocumentGenerator(out));
+            	}
+            	if(format.indexOf("xdoc")>-1) {
+                	main.addDocumentGenerator(new XDocGenerator(out));
+            	}
+            	if(format.indexOf("text")>-1) {
+                	main.addDocumentGenerator(new ConsoleGenerator(out));
+            	}
+            }
             main.generate();
-
         } catch (Exception e) {
             e.printStackTrace();
             throw new BuildException(e);

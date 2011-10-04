@@ -5,7 +5,7 @@
 	<groupId>com.thoughtworks.testdox</groupId>
 	<artifactId>TestDox</artifactId>
 	<packaging>jar</packaging>
-	<version>0.3-SNAPSHOT</version>
+	<version>0.4-SNAPSHOT</version>
 	<description>&lt;p&gt;TestDox creates simple documentation from the method names in JUnit test cases.&lt;/p&gt;
 		&lt;p&gt;
 			For Example, a test class like:
@@ -13,64 +13,111 @@
 			would generate:
 			&lt;pre&gt;Test - is a singleton&lt;/pre&gt;
 		&lt;/p&gt;</description>
-  <inceptionYear>2003</inceptionYear>
+	<inceptionYear>2003</inceptionYear>
 
-    <organization>
-        <name>Thoughtworks</name>
-        <url>http://www.thoughtworks.com/</url>
-    </organization>
+	<contributors>
+		<contributor>
+			<name>Fabrizio Cannizzo</name>
+			<url>http://smartrics.blogspot.com</url>
+			<timezone>(GMT) Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London</timezone>
+			<roles>
+				<role>contributor</role>
+			</roles>
+		</contributor>
+	</contributors>
+	<organization>
+		<name>Thoughtworks</name>
+		<url>http://www.thoughtworks.com/</url>
+	</organization>
 
-    <url>http://agiledox.sourceforge.net/index.html</url>
+	<url>http://agiledox.sourceforge.net/index.html</url>
 
-  <developers>
-    <developer>
-      <id>skizz</id>
-      <name>Chris stevenson</name>
-      <email>chris@skizz.biz</email>
-      <organization>http://skizz.biz/blog/</organization>
-    </developer>
-  </developers>
+	<developers>
+		<developer>
+			<id>skizz</id>
+			<name>Chris stevenson</name>
+			<email>chris@skizz.biz</email>
+			<organization>http://skizz.biz/blog/</organization>
+		</developer>
+	</developers>
 
-  <build>
-	<plugins>
-	    <plugin>
-	        <artifactId>maven-compiler-plugin</artifactId>
-	        <configuration>
-	            <source>1.5</source>
-	            <target>1.5</target>
-	        </configuration>
-	    </plugin>
-    </plugins>
-  </build>
+	<build>
+		<defaultGoal>package</defaultGoal>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>com.thoughtworks.testdox.Main</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
-  <dependencies>
-    <dependency>
-      <groupId>com.thoughtworks.qdox</groupId>
-      <artifactId>qdox</artifactId>
-      <version>1.6.3</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.2</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
-    </dependency>
-    <dependency>
-    	<groupId>org.mockito</groupId>
-    	<artifactId>mockito-all</artifactId>
-    	<version>1.4</version>
-    	<scope>test</scope>
-    </dependency>
-  </dependencies>
+	<dependencies>
+		<dependency>
+			<groupId>com.thoughtworks.qdox</groupId>
+			<artifactId>qdox</artifactId>
+			<version>1.6.3</version>
+			<type>jar</type>
+			<optional>false</optional>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.8.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.2</version>
+			<type>jar</type>
+			<optional>false</optional>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.14</version>
+			<type>jar</type>
+			<optional>false</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.4</version>
+			<type>jar</type>
+			<scope>test</scope>
+			<optional>false</optional>
+		</dependency>
+	</dependencies>
 
-  <reports>
-    <report>maven-changelog-plugin</report>
-    <report>maven-javadoc-plugin</report>
-    <report>maven-junit-report-plugin</report>
-  </reports>
+	<reports>
+		<report>maven-changelog-plugin</report>
+		<report>maven-javadoc-plugin</report>
+		<report>maven-junit-report-plugin</report>
+	</reports>
 
 </project>

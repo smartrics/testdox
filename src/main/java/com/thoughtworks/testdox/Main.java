@@ -103,9 +103,8 @@ public class Main implements Generator {
 
     private void doMethods(JavaMethod[] methods) {
         for (int k = 0; k < methods.length; k++) {
-
             String name = methods[k].getName();
-            if (prettifier.isATestMethod(name)) {
+            if (prettifier.isATestMethod(methods[k])) {
                 gen.onTest(prettifier.prettifyTestMethod(name));
             }
         }
@@ -152,6 +151,7 @@ public class Main implements Generator {
     public void processArguments(String[] args) throws IOException {
 
         if (args.length == 0) {
+            showUsage();
             gui = new Gui("Test Docs", this);
             gui.show();
             return;

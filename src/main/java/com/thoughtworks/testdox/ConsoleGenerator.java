@@ -7,21 +7,27 @@ import java.io.PrintStream;
  * 2003-08-12 out.flush() added at the suggestion of Mike Mason
  */
 public class ConsoleGenerator extends AbstractGenerator {
-    private PrintStream out;
+    private PrintWriter out;
 
     public ConsoleGenerator() {
         this(System.out);
     }
 
     public ConsoleGenerator(PrintStream out) {
+        this.out = new PrintWriter(out);
+    }
+
+    public ConsoleGenerator(PrintWriter out) {
         this.out = out;
     }
 
     public void startClass(String name) {
+    	super.startClass(name);
         out.println(name);
         out.flush();
     }
     public void onTest(String name) {
+    	super.onTest(name);
         out.println("    - " + name);
         out.flush();
     }

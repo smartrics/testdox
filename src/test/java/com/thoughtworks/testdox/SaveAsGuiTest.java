@@ -1,16 +1,20 @@
 package com.thoughtworks.testdox;
 
+import static org.junit.Assert.*;
 import junit.framework.TestCase;
 
 import java.io.IOException;
 
-public class SaveAsGuiTest extends TestCase {
+import org.junit.Before;
+import org.junit.Test;
+
+public class SaveAsGuiTest {
     private SaveAsGui gui;
     private static final String HELPFUL_TEXT = "Some helpful text";
     private static final String SAVE_TEXT = "Save HTML";
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         gui = new SaveAsGui(HELPFUL_TEXT, SAVE_TEXT) {
             public DocumentGenerator createDocumentGenerator() {
                 return null;
@@ -18,20 +22,24 @@ public class SaveAsGuiTest extends TestCase {
         };
     }
 
+    @Test
     public void testClickSaveAsSetsFileText() throws IOException {
         gui.fileChooser = GuiTestUtil.selectSrcChooser;
         gui.saveAsButton.doClick();
         assertEquals( GuiTestUtil.selectedFile.getCanonicalPath(), gui.fileName.getText() );
     }
 
+    @Test
     public void testLabelHasHelpfulText() throws IOException {
         assertEquals( HELPFUL_TEXT, gui.titledBorder.getTitle() );
     }
 
+    @Test
     public void testSaveAsHasMeaningfulText() throws IOException {
         assertEquals( SAVE_TEXT, gui.saveAsButton.getText() );
     }
 
+    @Test
     public void testHtmlSaveAsGuiReturnsHtmlDocGenerator() {
         HtmlSaveAsGui gui = new HtmlSaveAsGui();
         gui.fileName.setText("test.html");
@@ -40,6 +48,7 @@ public class SaveAsGuiTest extends TestCase {
         assertTrue(documentGenerator instanceof HtmlDocumentGenerator);
     }
 
+    @Test
     public void testTextSaveAsGuiReturnsTextGenerator() {
         TextSaveAsGui gui = new TextSaveAsGui();
         gui.fileName.setText("test.txt");

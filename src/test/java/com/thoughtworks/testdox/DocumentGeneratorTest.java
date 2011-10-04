@@ -1,8 +1,12 @@
 package com.thoughtworks.testdox;
 
+import static org.junit.Assert.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockito.Mockito;
 
 import junit.framework.TestCase;
@@ -17,11 +21,12 @@ import com.thoughtworks.qdox.model.JavaSource;
  * Time: 3:38:22 PM
  * To change this template use Options | File Templates.
  */
-public class DocumentGeneratorTest extends TestCase {
+public class DocumentGeneratorTest {
 
     List<String> messages = new ArrayList<String>();
     private Main main;
     
+    @Before
     public void setUp()
     {
         main = new Main();
@@ -56,12 +61,14 @@ public class DocumentGeneratorTest extends TestCase {
         }
     }
 
+    @Test
     public void testStartRunAndEndRunAreCalled() {
         main.doSources(new JavaSource[] {});
         assertTrue(messages.contains("startRun()"));
         assertTrue(messages.contains("endRun()"));
     }    
 
+    @Test
     public void testStartClassAndEndClassAreCalled() {
         Main main = new Main();
         main.addDocumentGenerator(new Foo());

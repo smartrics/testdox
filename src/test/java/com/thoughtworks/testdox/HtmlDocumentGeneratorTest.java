@@ -1,27 +1,34 @@
 package com.thoughtworks.testdox;
 
+import static org.junit.Assert.*;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
-public class HtmlDocumentGeneratorTest extends TestCase {
+public class HtmlDocumentGeneratorTest {
 
     private StringWriter out;
 
     private HtmlDocumentGenerator gen;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         out = new StringWriter();
         gen = new HtmlDocumentGenerator(new PrintWriter(out));
     }
 
+    @Test
     public void testShowsHeadingForClass() {
         gen.startClass("Foo");
         assertMatches("<h2>Foo</h2>");
     }
 
+    @Test
     public void testUnorderedListForMethods() {
         gen.startClass("Foo");
         gen.onTest("ATest");

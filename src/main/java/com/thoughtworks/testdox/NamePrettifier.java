@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
+import com.thoughtworks.qdox.model.Annotation;
+import com.thoughtworks.qdox.model.JavaMethod;
+
 public class NamePrettifier {
 
     private Logger log = Logger.getLogger(NamePrettifier.class);
@@ -13,6 +16,9 @@ public class NamePrettifier {
     String[] sufixList = { "Test", "Behaviour" };
     String[] prefixList = { "Test", "Should" };
 
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.testdox.NamePrettifier#prettifyTestClass(java.lang.String)
+	 */
     public String prettifyTestClass(String className) {
         String title = className;
         List<String> suffixs = Arrays.asList(sufixList);
@@ -65,6 +71,9 @@ public class NamePrettifier {
         this.prefixList[0] = prefix;
     }
 
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.testdox.NamePrettifier#prettifyTestMethod(java.lang.String)
+	 */
     public String prettifyTestMethod(String methodName) {
         StringBuffer buf = new StringBuffer();
         String testMethod = methodName;
@@ -96,6 +105,9 @@ public class NamePrettifier {
         return prettyName;
     }
 
+    /* (non-Javadoc)
+	 * @see com.thoughtworks.testdox.NamePrettifier#isATestMethod(java.lang.String)
+	 */
     public boolean isATestMethod(String testMethod) {
         List<String> suffixs = Arrays.asList(sufixList);
         List<String> prefixs = Arrays.asList(prefixList);
@@ -110,5 +122,15 @@ public class NamePrettifier {
             }
         }
         return false;
+    }
+
+    public boolean isATestMethod(JavaMethod testMethod) {
+        Annotation[] annotations = testMethod.getAnnotations();
+        for(Annotation annotation : annotations) {
+        	if(annotation.getType().getJavaClass().isA(org.junit.Test.class.getName())) {
+        		return true;
+        	}
+        }
+        return isATestMethod(testMethod.getName());
     }
 }

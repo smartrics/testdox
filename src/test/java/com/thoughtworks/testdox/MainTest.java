@@ -1,18 +1,24 @@
 package com.thoughtworks.testdox;
 
+import static org.junit.Assert.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import junit.framework.TestCase;
 
-public class MainTest extends TestCase {
+public class MainTest {
     private MockDocumentGenerator gen;
     private Main main;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
         gen = new MockDocumentGenerator();
 
@@ -21,6 +27,7 @@ public class MainTest extends TestCase {
         main.addDocumentGenerator(gen);
     }
 
+    @Test
     public void testMainParsesThisTest() {
         main.parse();
         try {
@@ -35,6 +42,7 @@ public class MainTest extends TestCase {
 
     }
 
+    @Test
     public void testMainHandlesMultipleDocumentGenerators() {
 
         MockDocumentGenerator gen1 = new MockDocumentGenerator();
@@ -54,17 +62,20 @@ public class MainTest extends TestCase {
 
     }
 
+    @Test
     public void testIncludesCommonTestFileNamePatterns() {
         assertTrue(main.isTestClass("FooTest"));
         assertTrue(main.isTestClass("FooTestCase"));
         assertTrue(main.isTestClass("TestFoo"));
     }
 
+    @Test
     public void testIgnoreNonTestClasses() {
         assertTrue(!main.isTestClass("Foo"));
         assertTrue(!main.isTestClass("FooTestBlah"));
     }
 
+    @Test
     public void testIgnoreSetUpMethod() {
         main.parse();
         try {
@@ -77,11 +88,13 @@ public class MainTest extends TestCase {
         assertFalse(descriptions.contains("p"));
     }
 
+    @Test
     public void testMainShowsUsageIfCalledWithHelpParameter() {
         assertContains(runAndRecordSysError(new String[] { "--help" }), "Usage");
         assertContains(runAndRecordSysError(new String[] { "-h" }), "Usage");
     }
 
+    @Test
     public void testIfNoArgumentsShowGui() {
         Main.main(new String[] {});
         Gui frame = (Gui) Main.gui;
@@ -90,12 +103,14 @@ public class MainTest extends TestCase {
         assertNotNull(frame.gen);
     }
 
+    @Test
     public void testSpecifyTextOutputFile() throws IOException {
         Main main = new Main();
         main.processArguments(new String[] { "-txt", "foo.txt", "src" });
         assertTrue(new File("foo.txt").exists());
     }
 
+    @Test
     public void testMainShowsUsageIfNoParameters() {
         PrintStream oldErr = System.err;
         String result = null;
@@ -111,6 +126,7 @@ public class MainTest extends TestCase {
         assertTrue(result.indexOf(Main.class.getName()) >= 0);
     }
 
+    @Test
     public void testSpecifyHtmlOutputFile() throws IOException {
         Main main = new Main();
         main.processArguments(new String[] { "-html", "foo.html", "src" });

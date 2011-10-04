@@ -1,8 +1,14 @@
 package com.thoughtworks.testdox;
 
+import static org.junit.Assert.*;
 import junit.framework.TestCase;
 
 import javax.swing.*;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +24,12 @@ import com.thoughtworks.testdox.Gui;
  * Time: 19:09:15
  * To change this template use Options | File Templates.
  */
-public class GuiTest extends TestCase {
+public class GuiTest {
     private Gui gui;
     private TestGenerator gen;
 
-    protected void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
 
         //Avoid overwriting any of the users real preferences by setting a test set
         Preferences testPrefs = Preferences.userNodeForPackage(GuiTest.class);
@@ -32,12 +39,13 @@ public class GuiTest extends TestCase {
         gui = new Gui("foo", gen);
     }
 
-    protected void tearDown() throws Exception {
-        super.tearDown();
+    @After
+    public void tearDown() throws Exception {
         Gui.prefs.clear();
         Gui.prefs.flush();
     }
 
+    @Test
     public void testShowsFileChooserIfBrowseIsClicked() {
         final boolean[] wasShown = new boolean[]{false};
 
@@ -55,11 +63,13 @@ public class GuiTest extends TestCase {
         assertTrue(wasShown[0]);
     }
 
+    @Test
     public void testExitJvmOnClose() {
         gui = new Gui("foo", gen);
         assertEquals(JFrame.EXIT_ON_CLOSE, gui.getDefaultCloseOperation());
     }
 
+    @Test
     public void testSelectedFileIsShownInTextField() throws IOException {
 
         gui.fileChooser = GuiTestUtil.selectSrcChooser;
@@ -68,12 +78,14 @@ public class GuiTest extends TestCase {
         assertEquals(GuiTestUtil.selectedFile.getCanonicalPath(), gui.path.getText());
     }
 
+    @Test
     public void testSelectedDirectoryIsWrittenToPreferences() throws IOException {
         gui.fileChooser = GuiTestUtil.selectSrcChooser;
         gui.browseButton.doClick();
         assertEquals(GuiTestUtil.selectedFile.getCanonicalPath(), Gui.prefs.get(Gui.SELECTED_DIRECTORY_KEY, null));
     }
 
+    @Test
     public void testSelectedDirectoryIsReadFromPreferences() throws IOException {
         testSelectedDirectoryIsWrittenToPreferences();
         Gui gui = new Gui("second gui", gen);
@@ -83,6 +95,7 @@ public class GuiTest extends TestCase {
         assertEquals(GuiTestUtil.selectedFile.getCanonicalPath(), gui.fileChooser.getSelectedFile().getCanonicalPath());
     }
 
+    @Test
     public void testSelectedFileIsNotShownIfUserClickedCancel() {
         JFileChooser chooser = new JFileChooser() {
             public File getSelectedFile() {
@@ -101,6 +114,7 @@ public class GuiTest extends TestCase {
         assertEquals("", gui.path.getText());
     }
 
+    @Test
     public void testGoButtonEnableUponUserFileSelection() {
         assertFalse(gui.goButton.isEnabled());
         gui.fileChooser = GuiTestUtil.selectSrcChooser;
@@ -131,6 +145,7 @@ public class GuiTest extends TestCase {
         }
     };
 
+    @Test
     public void testClickGoButtonRunsIt() {
 
         gui.path.setText("src");
@@ -141,17 +156,20 @@ public class GuiTest extends TestCase {
     }
 
 
+    @Test
     public void testGoButtonDisabledIfFileDoesNotExist() {
         gui.path.setText("non-existent-file");
         assertFalse(gui.goButton.isEnabled());
     }
 
+    @Test
     public void testEnteringPathFreehandEnablesGoButtonAndMakesItDefault() throws IOException, InterruptedException {
         gui.path.setText(GuiTestUtil.selectedFile.getCanonicalPath());
         assertTrue(gui.goButton.isEnabled());
         assertTrue(gui.goButton.isDefaultButton());
     }
 
+    @Test
     public void testConfiguredDocumentGeneratorIsAddedToGenerators() throws IOException, InterruptedException {
         MockDocumentGenerator testDocumentGenerator = new MockDocumentGenerator();
         JLabel guiComponent = new JLabel();
@@ -163,6 +181,7 @@ public class GuiTest extends TestCase {
         assertTrue(generatorGui.createDocumentGeneratorWasCalled());
     }
 
+    @Test
     public void testUnConfiguredDocumentGeneratorIsNotAddedToGenerators() throws IOException, InterruptedException {
         MockDocumentGenerator testDocumentGenerator = new MockDocumentGenerator();
         JLabel guiComponent = new JLabel();
